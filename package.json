@@ -1,0 +1,31 @@
+{
+  "name": "kuzzle-plugin-sentry",
+  "author": "The Kuzzle Team <support@kuzzle.io>",
+  "version": "2.0.0",
+  "description": "Kuzzle plugin boilerplate template",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "npm run --silent test:lint",
+    "test:lint": "eslint --max-warnings=0 ./lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kuzzleio/kuzzle-plugin-sentry.git"
+  },
+  "keywords": [
+    "kuzzle",
+    "plugin",
+    "template"
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/kuzzleio/kuzzle-plugin-sentry/issues"
+  },
+  "homepage": "https://github.com/kuzzleio/kuzzle-plugin-sentry#readme",
+  "devDependencies": {
+    "eslint": "^5.16.0"
+  },
+  "dependencies": {
+    "@sentry/node": "^5.12.3"
+  }
+}
