@@ -45,6 +45,10 @@ It will send the error to Sentry alongside with other useful informations like:
 
 Finally, is adds a [Sentry tag](https://docs.sentry.io/enriching-error-data/context/?platform=javascript#tagging-events) containing the controller and action name to quickly identify related events.
 
+### Filtered values
+
+Any sensitive information will be filtered in the Sentry report. This include password and authentication tokens.
+
 ### Extended API
 
 This plugin also expose an API method in order to enable or disable sending events to Sentry.
@@ -70,3 +74,7 @@ curl localhost:7512/_plugin/sentry/switch/on
 # disable plugin
 curl localhost:7512/_plugin/sentry/switch/off
 ```
+
+## Example of Sentry report
+
+![sentry kuzzle](sentry-kuzzle.gif)
