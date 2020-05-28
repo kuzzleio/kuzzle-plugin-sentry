@@ -5,12 +5,13 @@
       "environment": "production",
       "ignore": {
         "ids": [],
-        "statuses": [ 401, 403 ]
+        "statuses": []
       },
       "excludeIntegrations": [
         "Http",
         "Console"
-      ]
+      ],
+      "sensitiveValues": []
     }
   }
 }

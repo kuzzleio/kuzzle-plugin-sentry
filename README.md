@@ -4,7 +4,7 @@ This plugin allows to send the errors encountered by Kuzzle to Sentry for furthe
 
 ## Installation
 
-First, you have to get the Sentry DSN secret URL associated with the project you want to monitor.  
+First, you have to get the Sentry DSN URL associated with the project you want to monitor.  
 Please refer to Sentry [documentation](https://docs.sentry.io/) to create a new Node.js project and get your DSN.  
 
 One you have it, you have to provide the DSN to the plugin using one of the following method.
@@ -32,6 +32,8 @@ You can configure the plugin by using [Kuzzle configuration file](https://docs.k
 
 It's possible to define the [Sentry environment](https://docs.sentry.io/enriching-error-data/environments/) to bring even more context to catched errors.
 
+You can either provide the `KUZZLE_ENV` environment variable or add the following key to the configuration:
+
 ```js
 
 {
@@ -47,6 +49,10 @@ It's possible to define the [Sentry environment](https://docs.sentry.io/enrichin
 ### Ignore errors
 
 You can define errors that will be ignored and thus not send to Sentry.  
+
+By default the plugin will only send the `PluginImplementationError`.  
+
+If you add filters manually, then it will send every errors except those matching the filters.
 
 You can filter errors either by [status](https://docs.kuzzle.io/core/2/api/essentials/errors/handling/) or by [id](https://docs.kuzzle.io/core/2/api/essentials/errors/codes/).  
 
@@ -76,6 +82,22 @@ By default, those values are:
  - `context.token._id`: contain the authentication token
  - `context.token.jwt`: authentication token
  - `input.jwt`: authentication token
+ - `input.body.password`: password of the `local` strategy
+
+You can add other value to be filtered automatically in the `sensitiveValues` array:
+
+```js
+{
+  // kuzzle configuration file
+  "plugins": {
+    "sentry": {
+      "sensitiveValues": [
+        "input.body.fbkeyid"
+      ]
+    }
+  }
+}
+```
 
 ### Exclude Sentry integrations
 
@@ -121,6 +143,11 @@ You can exclude default Sentry integration by providing their name in the config
       "excludeIntegrations": [
         "Http",
         "Console"
+      ],
+
+      // Additional sensitives values to filter before sending the error
+      "sensitiveValues": [
+        "input.body.fbkeyid"
       ]
     }    
   }
@@ -129,9 +156,9 @@ You can exclude default Sentry integration by providing their name in the config
 
 ## Extended API
 
-This plugin also expose an API method in order to enable or disable sending events to Sentry.
-
 #### admin:switch
+
+This plugin also expose an API method in order to enable or disable sending events to Sentry.
 
 JSON payload:
 
@@ -151,6 +178,31 @@ curl localhost:7512/_plugin/sentry/switch/on
 
 # disable plugin
 curl localhost:7512/_plugin/sentry/switch/off
+```
+
+#### send:generic
+
+Sends an error to sentry.
+
+```js
+// Example usage in another plugin
+
+this.context.accessors.sdk.query({
+  controller: 'sentry/send',
+  action: 'request',
+  body: {
+    error: new Error('failure'),
+    tags: {
+      tag1: 'gordon',
+      tag2: 'alyx'
+    },
+    extras: {
+      some: 'extra data',
+      whatever: 'you want'
+    },
+    request: // Optional errored request
+  }
+})
 ```
 
 ## Example of Sentry report
