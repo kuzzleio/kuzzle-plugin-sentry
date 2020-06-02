@@ -1,7 +1,7 @@
 {
   "name": "kuzzle-plugin-sentry",
   "author": "The Kuzzle Team <support@kuzzle.io>",
-  "version": "2.0.0",
+  "version": "0.2.0",
   "description": "Kuzzle plugin boilerplate template",
   "main": "lib/index.js",
   "scripts": {
