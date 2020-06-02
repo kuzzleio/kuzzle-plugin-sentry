@@ -1,0 +1,17 @@
+{
+  "plugins": {
+    "sentry": {
+      "dsn": "",
+      "environment": "production",
+      "ignore": {
+        "ids": [],
+        "statuses": []
+      },
+      "excludeIntegrations": [
+        "Http",
+        "Console"
+      ],
+      "sensitiveValues": []
+    }
+  }
+}

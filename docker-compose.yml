@@ -27,6 +27,7 @@ services:
       - kuzzle_services__memoryStorage__node__host=redis
       - NODE_ENV=development
       - DEBUG=kuzzle:plugins
+      - KUZZLE_ENV
       - SENTRY_DSN
 
   redis:
