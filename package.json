@@ -1,7 +1,7 @@
 {
   "name": "kuzzle-plugin-sentry",
   "author": "The Kuzzle Team <support@kuzzle.io>",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "Kuzzle plugin reporting the errors of failed API requests to Sentry",
   "main": "lib/index.js",
   "scripts": {
