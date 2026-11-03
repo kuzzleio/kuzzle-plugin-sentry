@@ -1,12 +1,14 @@
 {
   "name": "kuzzle-plugin-sentry",
   "author": "The Kuzzle Team <support@kuzzle.io>",
-  "version": "0.2.2",
-  "description": "Kuzzle plugin boilerplate template",
+  "version": "0.2.1",
+  "description": "Kuzzle plugin reporting the errors of failed API requests to Sentry",
   "main": "lib/index.js",
   "scripts": {
-    "test": "npm run --silent test:lint",
-    "test:lint": "eslint --max-warnings=0 ./lib"
+    "test": "npm run test:lint && npm run test:unit",
+    "test:lint": "eslint --max-warnings=0 ./lib ./test",
+    "test:unit": "node --test",
+    "test:lint:fix": "eslint --fix --max-warnings=0 ./lib ./test"
   },
   "repository": {
     "type": "git",
@@ -15,17 +17,27 @@
   "keywords": [
     "kuzzle",
     "plugin",
-    "template"
+    "sentry"
   ],
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/kuzzleio/kuzzle-plugin-sentry/issues"
   },
   "homepage": "https://github.com/kuzzleio/kuzzle-plugin-sentry#readme",
-  "devDependencies": {
-    "eslint": "^5.16.0"
-  },
   "dependencies": {
-    "@sentry/node": "^5.12.3"
-  }
+    "@sentry/node": "^11.10.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "semantic-release-config-kuzzle": "1.8.0"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "files": [
+    "lib/",
+    "manifest.json"
+  ]
 }

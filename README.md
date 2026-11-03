@@ -2,7 +2,14 @@
 
 This plugin allows to send the errors encountered by Kuzzle to Sentry for further detailed analysis.
 
+## Requirements
+
+- Kuzzle 2
+- Node.js >= 20.19.0 (required by `@sentry/node` 11)
+
 ## Installation
+
+Install the plugin in your Kuzzle application with `npm install kuzzle-plugin-sentry`, then enable it as any other [Kuzzle plugin](https://docs.kuzzle.io/core/2/guides/write-plugins/start-writing-plugins/).
 
 First, you have to get the Sentry DSN URL associated with the project you want to monitor.  
 Please refer to Sentry [documentation](https://docs.sentry.io/) to create a new Node.js project and get your DSN.  
@@ -76,15 +83,19 @@ Theses filters can be defined in the configuration file:
 
 ### Filter sensitive values
 
-Any sensitive information will be filtered in the Sentry report. This include password and authentication tokens.  
+The request reported to Sentry never contains the authentication token nor the request headers.  
 
-By default, those values are:
- - `context.token._id`: contain the authentication token
- - `context.token.jwt`: authentication token
- - `input.jwt`: authentication token
- - `input.body.password`: password of the `local` strategy
+The `input.body.password` value (password of the `local` strategy) is always replaced by `[Filtered]`.
 
-You can add other value to be filtered automatically in the `sensitiveValues` array:
+You can add other values to be filtered automatically in the `sensitiveValues` array. Each entry is a path in the reported request, which has the following shape:
+
+```js
+{
+  requestId: '...',
+  context: { user: { _id: '...' }, connection: { protocol: 'http' } },
+  input: { controller, action, args, body, volatile }
+}
+```
 
 ```js
 {
@@ -182,16 +193,18 @@ curl localhost:7512/_plugin/sentry/switch/off
 
 #### send:generic
 
-Sends an error to sentry.
+Sends an error to Sentry. The `ignore` filters do not apply to it.
+
+The `error` can be an error message, or an object with `message` and optional `name` and `stack` properties. The action returns `{ sent: true, eventId }`, or `{ sent: false }` when the plugin is disabled or has no DSN.
 
 ```js
 // Example usage in another plugin
 
 this.context.accessors.sdk.query({
   controller: 'sentry/send',
-  action: 'request',
+  action: 'generic',
   body: {
-    error: new Error('failure'),
+    error: { message: 'failure', name: 'MyPluginError' },
     tags: {
       tag1: 'gordon',
       tag2: 'alyx'
@@ -200,7 +213,7 @@ this.context.accessors.sdk.query({
       some: 'extra data',
       whatever: 'you want'
     },
-    request: // Optional errored request
+    request: { input: { controller: 'document', action: 'create' } } // Optional errored request
   }
 })
 ```
